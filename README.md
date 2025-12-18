@@ -137,21 +137,21 @@ LatentMAS/
 ### 🔹 **Baseline (single model)**
 
 ```bash
-python run.py --method baseline --model_name Qwen/Qwen3-14B --task gsm8k --max_samples -1
+python run.py --method baseline --model_name Qwen/Qwen3-14B --task gsm8k --max_samples -1 --max_new_tokens 2048
 ```
 
 
 ### 🔹 **TextMAS (text based multi-agent system)**
 
 ```bash
-python run.py --method text_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1
+python run.py --method text_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1 --max_new_tokens 2048
 ```
 
 
 ### 🔹 **LatentMAS (our latent mas method)**
 
 ```bash
-python run.py --method latent_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1
+python run.py --method latent_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1 --max_new_tokens 2048
 ```
 
 #### Notes:
@@ -163,7 +163,7 @@ python run.py --method latent_mas --model_name Qwen/Qwen3-14B --task gsm8k --pro
   We treat this as a **hyperparameter** — enable/disable depending on task/model:
 
 ```bash
-python run.py --method latent_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1 --latent_space_realign
+python run.py --method latent_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1 --latent_space_realign --max_new_tokens 2048
 ```
 
 
@@ -186,13 +186,13 @@ LatentMAS supports vLLM for faster inference.
 ### 🔹 Baseline with vLLM
 
 ```bash
-python run.py --method baseline --model_name Qwen/Qwen3-14B --task gsm8k --max_samples -1 --use_vllm
+python run.py --method baseline --model_name Qwen/Qwen3-14B --task gsm8k --max_samples -1 --use_vllm --max_new_tokens 2048
 ```
 
 ### 🔹 TextMAS with vLLM
 
 ```bash
-python run.py --method text_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1 --use_vllm
+python run.py --method text_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1 --use_vllm --max_new_tokens 2048
 ```
 
 ### 🔹 LatentMAS with vLLM
@@ -206,7 +206,7 @@ For this setup, we recommend using two GPUs:
 - One GPU for the auxiliary HF model (`--device2`, e.g., `cuda:1`)
 
 ```bash
-CUDA_VISIBLE_DEVICES=0,1 python run.py --method latent_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1 \
+CUDA_VISIBLE_DEVICES=0,1 python run.py --method latent_mas --model_name Qwen/Qwen3-14B --task gsm8k --prompt sequential --max_samples -1 --max_new_tokens 2048 \
   --use_vllm \
   --use_second_HF_model \
   --enable_prefix_caching \
