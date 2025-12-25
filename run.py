@@ -13,7 +13,8 @@ from data import (
     load_gpqa_diamond,
     load_mbppplus,
     load_humanevalplus,
-    load_medqa
+    load_medqa,
+    load_chunk_medqa
 )
 from methods.baseline import BaselineMethod
 from methods.latent_mas import LatentMASMethod
@@ -65,13 +66,13 @@ def process_batch(
             agent_input = a.get("input", "").rstrip()
             agent_output = a.get("output", "").rstrip()
             latent_steps = a.get("latent_steps", None)
-            print("[To Tokenize]")
-            print(agent_input)
+            # print("[To Tokenize]")
+            # print(agent_input)
             if latent_steps is not None:
                 print("[Latent Steps]")
                 print(latent_steps)
-            print("[Output]")
-            print(agent_output)
+            # print("[Output]")
+            # print(agent_output)
             print("----------------------------------------------")
         print(f"Result: Pred={res.get('prediction')} | Gold={res.get('gold')} | OK={res.get('correct')}")
 
@@ -88,11 +89,11 @@ def main():
     parser.add_argument("--method", choices=["baseline", "text_mas", "latent_mas"], required=True,
                         help="Which multi-agent method to run: 'baseline', 'text_mas', or 'latent_mas'.")
     parser.add_argument("--model_name", type=str, required=True,
-                        choices=["Qwen/Qwen3-4B", "Qwen/Qwen3-4B", "Qwen/Qwen3-14B"],
                         help="Model choices to use for experiments (e.g. 'Qwen/Qwen3-14B').")
     parser.add_argument("--max_samples", type=int, default=-1, help="Number of questions to evaluate; set -1 to use all samples.")
-    parser.add_argument("--task", choices=["gsm8k", "aime2024", "aime2025", "gpqa", "arc_easy", "arc_challenge", "mbppplus", 'humanevalplus', 'medqa'], default="gsm8k",
+    parser.add_argument("--task", default="gsm8k", choices=['gsm8k', 'medqa', 'medqa_chunk'],
                         help="Dataset/task to evaluate. Controls which loader is used.")
+    parser.add_argument("--chunk", type=int, default=-1, help='data-chunk')
     parser.add_argument("--prompt", type=str, choices=["sequential", "hierarchical"], default="sequential", help="Multi-agent system architecture: 'sequential' or 'hierarchical'.")
 
     # other args
@@ -183,7 +184,7 @@ def main():
     elif args.task == "humanevalplus":
         dataset_iter = load_humanevalplus(split='test')
     elif args.task == "medqa":
-        dataset_iter = load_medqa(split='test')
+        dataset_iter = load_chunk_medqa(chunk=args.chunk, split='test') if args.chunk != -1 else load_medqa(split='test') 
     else:
         raise ValueError(f'no {args.task} support')
 
